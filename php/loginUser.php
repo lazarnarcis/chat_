@@ -3,7 +3,7 @@
     session_start();
     $error = "";
 
-    $username = $email = "";
+    $username = "";
     if (!empty($_POST['username'])) {
         $username = $_POST['username'];
     }
@@ -24,6 +24,7 @@
         } else {
             $email = $row['email'];
             $id_channel = $row['id_channel'];
+            $id_user = $row['id_user'];
         }
     }
 
@@ -32,7 +33,10 @@
         $_SESSION['username'] = $username;
         $_SESSION['email'] = $email;
         $_SESSION['id_channel'] = $id_channel;
+        $_SESSION['id_user'] = $id_user;
     } else {
         echo $error;
     }
+
+    mysqli_close($sql);
 ?>

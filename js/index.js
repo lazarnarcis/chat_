@@ -1,6 +1,5 @@
 let channels = document.querySelector("#channels");
 let messages = document.querySelector("#messages");
-let id_channel = localStorage.getItem("id_channel");
 
 $.ajax({
     url: "./php/readChannels.php",
@@ -14,30 +13,39 @@ $.ajax({
     }
 });
 
-function setChannel (new_channel) {
-    if (id_channel != new_channel) {
-        localStorage.setItem("id_channel", new_channel);
-        $(".channel"+new_channel).css("background", "red");
-        $(".channel"+id_channel).css("background", "white");
-        id_channel = new_channel;
-    }
+function scrollTop (div) {
+    $(div).scrollTop($(div)[0].scrollHeight);
 }
+
+$('#inputText').keyup(function(e) {
+    if (e.which == 13) sendMessage();
+});
 
 function readMessages () {
     $.ajax({
         url: "./php/readMessages.php",
-        data: {
-            id_channel: id_channel
-        },
         type: "POST",
         success: function(data) {
-            localStorage.setItem("id_channel", id_channel);
             messages.innerHTML = data;
+            scrollTop(messages);
         }
     });
 }
 
 setInterval(readMessages, 1000);
+
+function setChannel (new_channel) {
+    $.ajax({
+        url: "./php/setChannel.php",
+        data: {
+            id_channel: new_channel
+        },
+        type: "POST",
+        success: function(data) {
+            console.log("Success!");
+        }
+    });
+}
 
 function sendMessage () {
     let input = document.querySelector("#inputText");
@@ -49,8 +57,7 @@ function sendMessage () {
         url: "./php/sendMessage.php",
         type: "POST",
         data: {
-            message: input.value,
-            id_channel: localStorage.getItem("id_channel")
+            message: input.value
         },
         success: function (data) {
             input.value = "";

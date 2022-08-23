@@ -1,7 +1,8 @@
 <?php
     require "../database.php";
+    session_start();
 
-    $id_channel = $_POST['id_channel'];
+    $id_channel = $_SESSION['id_channel'];
     $string = "SELECT * FROM messages WHERE id_channel='$id_channel'";
     $query = mysqli_query($sql, $string);
 
@@ -12,4 +13,6 @@
     } else {
         echo "No messages!";
     }
+
+    mysqli_close($sql);
 ?>

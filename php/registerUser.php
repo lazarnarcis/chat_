@@ -36,7 +36,11 @@
         $_SESSION['username'] = $username;
         $_SESSION['email'] = $email;
         $_SESSION['id_channel'] = $id_channel;
+        $id_user = mysqli_last_id($sql);
+        $_SESSION['id_user'] = $id_user;
     } else {
         echo $error;
     }
+
+    mysqli_close($sql);
 ?>

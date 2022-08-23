@@ -2,3 +2,9 @@
     border: 1px solid black;
     width: 100px;
 }
+
+#messages {
+    overflow-x: hidden;
+    height: auto;
+    max-height: 40vh;
+}
