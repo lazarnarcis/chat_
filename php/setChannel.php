@@ -7,6 +7,6 @@
     $string = "UPDATE users SET id_channel='$id_channel' WHERE id_user='$id_user'";
     mysqli_query($sql, $string);
     $_SESSION['id_channel'] = $id_channel;
-
+    echo $id_channel;
     mysqli_close($sql);
 ?>
