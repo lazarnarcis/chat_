@@ -36,30 +36,27 @@ function setChannel (new_channel) {
 
 let start = 0;
 
-function load() {
-    console.log(start);
+function loadChat() {
     $.get("./php/loadChat.php?start=" + start, function (result) {
         if (result.items) {
-            result.items.forEach(item => {
-                start = item.id_message;
-                $.post("./php/readMessages.php?id_message="+item.id_message, $(this).serialize()).done(function (data) {
+            for (let x = 0; x < result.items.length; x++) {
+                console.log(start);
+                start = result.items[x].id_message;
+                $.post("./php/readMessages.php?id_message="+result.items[x].id_message, $(this).serialize()).done(function (data) {
                     $("#messages").append(data);
                     scrollTop("#messages");
                 });
-            });
+            }
         }
-        load();
+        loadChat();
     });
 }
 
-load();
+loadChat();
 
 function sendMessage () {
     let input = document.querySelector("#inputText");
-    if (input.value == "") {
-        alert("Please fill the input!");
-        return;
-    }
+    if (input.value == "") return;
     $.ajax({
         url: "./php/sendMessage.php",
         type: "POST",
