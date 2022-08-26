@@ -21,3 +21,7 @@ function register () {
         });
     }
 }
+
+$("input[type=text], input[type=password], input[type=email]").keyup(function(e) {
+    if (e.which == 13) register();
+});

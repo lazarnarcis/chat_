@@ -29,6 +29,6 @@
         <input type="button" onclick="login();" value="Login">
     </form>
     <p>Don't have an account? <a href="register.php">Register here</a></p>
-    <script src="js/login.js"></script>
+    <script src="js/login.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

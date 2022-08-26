@@ -20,3 +20,7 @@ function login () {
         });
     }
 }
+
+$("input[type=text], input[type=password]").keyup(function(e) {
+    if (e.which == 13) login();
+});

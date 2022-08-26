@@ -1,17 +1,21 @@
 let channels = document.querySelector("#channels");
 let messages = document.querySelector("#messages");
 
-$.ajax({
-    url: "./php/readChannels.php",
-    type: "POST",
-    success: function(data) {
-        if (data.length == 0) {
-            channels.innerHTML = "No channels!";
-        } else {
-            channels.innerHTML = data;
+function readChannels () {
+    return $.ajax({
+        url: "./php/readChannels.php",
+        type: "POST",
+        success: function(data) {
+            if (data.length == 0) {
+                channels.innerHTML = "No channels!";
+            } else {
+                channels.innerHTML = data;
+            }
         }
-    }
-});
+    });
+}
+
+readChannels();
 
 function scrollTop (div) {
     $(div).scrollTop($(div)[0].scrollHeight);
@@ -40,12 +44,8 @@ function loadChat() {
     $.get("./php/loadChat.php?start=" + start, function (result) {
         if (result.items) {
             for (let x = 0; x < result.items.length; x++) {
-                console.log(start);
                 start = result.items[x].id_message;
-                $.post("./php/readMessages.php?id_message="+result.items[x].id_message, $(this).serialize()).done(function (data) {
-                    $("#messages").append(data);
-                    scrollTop("#messages");
-                });
+                readMessages(result.items[x].id_message);
             }
         }
         loadChat();
@@ -53,6 +53,20 @@ function loadChat() {
 }
 
 loadChat();
+
+function readMessages (id_message) {
+    $.ajax({
+        url: "./php/readMessages.php",
+        type: "GET",
+        data: {
+            id_message: id_message
+        },
+        success: function (data) {
+            $("#messages").append(data);
+            scrollTop("#messages");
+        }
+    });
+}
 
 function sendMessage () {
     let input = document.querySelector("#inputText");
