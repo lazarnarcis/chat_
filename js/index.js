@@ -1,5 +1,4 @@
-let channels = document.querySelector("#channels");
-let messages = document.querySelector("#messages");
+let channels = $("#channels"), messages = $("#messages"), start = 0;
 
 function readChannels () {
     return $.ajax({
@@ -7,9 +6,10 @@ function readChannels () {
         type: "POST",
         success: function(data) {
             if (data.length == 0) {
-                channels.innerHTML = "No channels!";
+                channels.html("No channels!");
             } else {
-                channels.innerHTML = data;
+                channels.html(data);
+                readMessages();
             }
         }
     });
@@ -34,33 +34,15 @@ function setChannel (new_channel) {
         type: "POST",
         success: function(data) {
             console.log("Success! New channel: "+data);
+            readMessages();
         }
     });
 }
 
-let start = 0;
-
-function loadChat() {
-    $.get("./php/loadChat.php?start=" + start, function (result) {
-        if (result.items) {
-            for (let x = 0; x < result.items.length; x++) {
-                start = result.items[x].id_message;
-                readMessages(result.items[x].id_message);
-            }
-        }
-        loadChat();
-    });
-}
-
-loadChat();
-
-function readMessages (id_message) {
+function readMessages () {
+    messages.html("");
     $.ajax({
         url: "./php/readMessages.php",
-        type: "GET",
-        data: {
-            id_message: id_message
-        },
         success: function (data) {
             $("#messages").append(data);
             scrollTop("#messages");
@@ -69,16 +51,17 @@ function readMessages (id_message) {
 }
 
 function sendMessage () {
-    let input = document.querySelector("#inputText");
-    if (input.value == "") return;
+    let input = $("#inputText");
+    if (input.val() == "") return;
     $.ajax({
         url: "./php/sendMessage.php",
         type: "POST",
         data: {
-            message: input.value
+            message: input.val()
         },
-        success: function (data) {
-            input.value = "";
+        success: function () {
+            input.val("");
+            readMessages();
         }
     });
 }
