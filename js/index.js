@@ -25,11 +25,13 @@ $('#inputText').keyup(function(e) {
     if (e.which == 13) sendMessage();
 });
 
-function setChannel (new_channel) {
+$(document).on("click", ".setChannel", function(){
+    let id_channel = $(this).data("channel-id");
+    console.log(id_channel);
     $.ajax({
         url: "./php/setChannel.php",
         data: {
-            id_channel: new_channel
+            id_channel: id_channel
         },
         type: "POST",
         success: function(data) {
@@ -37,7 +39,7 @@ function setChannel (new_channel) {
             readMessages();
         }
     });
-}
+});
 
 function readMessages () {
     messages.html("");

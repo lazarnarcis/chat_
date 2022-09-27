@@ -1,4 +1,4 @@
-#select-channel {
+#channels .setChannel {
     border: 1px solid black;
     width: 100px;
 }
