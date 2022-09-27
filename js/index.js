@@ -9,7 +9,6 @@ function readChannels () {
                 channels.html("No channels!");
             } else {
                 channels.html(data);
-                readMessages();
             }
         }
     });
@@ -36,21 +35,31 @@ $(document).on("click", ".setChannel", function(){
         type: "POST",
         success: function(data) {
             console.log("Success! New channel: "+data);
-            readMessages();
         }
     });
 });
 
 function readMessages () {
-    messages.html("");
     $.ajax({
         url: "./php/readMessages.php",
+        type: "POST",
+        data: {
+            start: start
+        },
         success: function (data) {
-            $("#messages").append(data);
-            scrollTop("#messages");
+            if (data.items) {
+                data.items.forEach(element => {
+                    start = element.id_message;
+                    $("#messages").append("<div>" + element.username + " - " + element.message + "</div>");
+                });
+                scrollTop("#messages");
+            }
         }
     });
 }
+
+readMessages();
+setInterval(readMessages, 750);
 
 function sendMessage () {
     let input = $("#inputText");
@@ -63,7 +72,6 @@ function sendMessage () {
         },
         success: function () {
             input.val("");
-            readMessages();
         }
     });
 }
