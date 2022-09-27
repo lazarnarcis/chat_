@@ -19,7 +19,7 @@
         $error = "This username doesn't exist in our database!";
     } else {
         $row = mysqli_fetch_assoc($query);
-        if ($password != $row['password']) {
+        if (md5($password) != $row['password']) {
             $error = "Incorrect password";
         } else {
             $email = $row['email'];

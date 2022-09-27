@@ -15,7 +15,7 @@
 
     $password = "";
     if (!empty($_POST['password'])) {
-        $password = $_POST['password'];
+        $password = md5($_POST['password']);
     }
 
     $string = "SELECT * FROM users WHERE username='$username' OR email='$email'";
